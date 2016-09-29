@@ -25,12 +25,12 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
     var ZCdelegate: ZCarouselDelegate?
     
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
         self.initalizeScrollViewProperties()
     }
     
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         self.initalizeScrollViewProperties()
     }
     
@@ -40,7 +40,7 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
     }
     
     func initalizeScrollViewProperties(){
-        super.pagingEnabled = true
+        super.isPagingEnabled = true
         super.contentSize = CGSize(width: 0, height: self.frame.height)
         super.clipsToBounds = false
         super.delegate = self
@@ -51,7 +51,7 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
     func addButtons(titles: [String]){
         originalArrayCount = titles.count
         //1
-        var buttonFrame = CGRectMake(0, 0, self.frame.size.width, self.frame.height)
+        var buttonFrame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
         
         //a
         var finalButtons = titles
@@ -61,8 +61,8 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
         let almostLastItem  = titles[titles.count-2]
         let lastItem        = titles.last
         //c
-        finalButtons.insert(almostLastItem, atIndex: 0)
-        finalButtons.insert(lastItem!, atIndex: 1)
+        finalButtons.insert(almostLastItem, at: 0)
+        finalButtons.insert(lastItem!, at: 1)
         finalButtons.append(firstItem)
         finalButtons.append(secondItem)
         
@@ -71,15 +71,15 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
             //3
             //println("\(i) - \(finalButtons[i])")
             if i != 0 {
-                buttonFrame = CGRectMake(buttonFrame.origin.x+buttonFrame.width,
-                    self.frame.height/2-self.frame.height/2,
-                    self.frame.size.width,
-                    self.frame.height)
+                buttonFrame = CGRect(x:buttonFrame.origin.x+buttonFrame.width,
+                                     y:self.frame.height/2-self.frame.height/2,
+                                     width:self.frame.size.width,
+                                     height:self.frame.height)
             }
             //4
             let button = UIButton(frame: buttonFrame)
-            button.setTitle(finalButtons[i], forState: UIControlState.Normal)
-            button.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+            button.setTitle(finalButtons[i], for: UIControlState.normal)
+            button.setTitleColor(UIColor.black, for: UIControlState.normal)
             //6
             self.addSubview(button)
             self.contentSize.width = super.contentSize.width+button.frame.width
@@ -94,7 +94,7 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
     func addImages(imagesToUSe: [String]){
         originalArrayCount = imagesToUSe.count
         //1
-        var imageViewFrame = CGRectMake(0, 0, self.frame.size.width, self.frame.height)
+        var imageViewFrame = CGRect(x:0, y:0, width:self.frame.size.width, height:self.frame.size.height)
         
         //a
         var finalImageViews = imagesToUSe
@@ -104,8 +104,8 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
         let almostLastItem  = imagesToUSe[imagesToUSe.count-2]
         let lastItem        = imagesToUSe.last
         //c
-        finalImageViews.insert(almostLastItem, atIndex: 0)
-        finalImageViews.insert(lastItem!, atIndex: 1)
+        finalImageViews.insert(almostLastItem, at: 0)
+        finalImageViews.insert(lastItem!, at: 1)
         finalImageViews.append(firstItem)
         finalImageViews.append(secondItem)
         
@@ -115,10 +115,10 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
             //3
             //println("\(i) - \(finalButtons[i])")
             if i != 0 {
-                imageViewFrame = CGRectMake(imageViewFrame.origin.x+imageViewFrame.width,
-                    self.frame.height/2-self.frame.height/2,
-                    self.frame.size.width,
-                    self.frame.height)
+                imageViewFrame = CGRect(x:imageViewFrame.origin.x+imageViewFrame.width, y:
+                    self.frame.size.height/2-self.frame.size.height/2,
+                                        width:self.frame.size.width, height:
+                    self.frame.size.height)
             }
             //4
             let imageView = UIImageView(frame: imageViewFrame)
@@ -140,22 +140,22 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
         page = scrollView.contentOffset.x / self.frame.width
         //2
         var objectsCount: CGFloat!
-        var objects = []
+        var objects = [] as NSArray
         if isImage==true {
             objectsCount = CGFloat(images.count)
-            objects = images
+            objects = images as NSArray
         }
         else {
             objectsCount = CGFloat(buttons.count)
-            objects = buttons
+            objects = buttons as NSArray
         }
         //3
         if page <= 1{
-            let scrollToObject: AnyObject = objects[Int(objectsCount-3)]
+            let scrollToObject: AnyObject = objects[Int(objectsCount-3)] as AnyObject
             self.scrollRectToVisible(scrollToObject.frame, animated: false)
         }
         if page >= objectsCount-2{
-            let scrollToObject: AnyObject = objects[2]
+            let scrollToObject: AnyObject = objects[2] as AnyObject
             self.scrollRectToVisible(scrollToObject.frame, animated: false)
         }
     }
@@ -175,6 +175,6 @@ class ZCarousel: UIScrollView, UIScrollViewDelegate {
         }
         
         //println(pageInt)
-        self.ZCdelegate?.ZCarouselShowingIndex(self, index: pageInt)
+        self.ZCdelegate?.ZCarouselShowingIndex(scrollview: self, index: pageInt)
     }
 }
